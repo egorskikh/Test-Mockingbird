@@ -8,6 +8,7 @@
 
 @testable import MockApp
 @testable import Mockingbird
+import Alamofire
 import Foundation
 import Swift
 import UIKit
@@ -84,4 +85,48 @@ public final class BirdbleMock: MockApp.Birdble, Mockingbird.Mock {
 /// Returns a concrete mock of `Birdble`.
 public func mock(_ type: MockApp.Birdble.Protocol, file: StaticString = #file, line: UInt = #line) -> BirdbleMock {
   return BirdbleMock(sourceLocation: Mockingbird.SourceLocation(file, line))
+}
+
+// MARK: - Mocked Networkable
+public final class NetworkableMock: MockApp.Networkable, Mockingbird.Mock {
+  typealias MockingbirdSupertype = MockApp.Networkable
+  static let staticMock = Mockingbird.StaticMock()
+  public let mockingbirdContext = Mockingbird.Context(["generator_version": "0.18.1", "module_name": "MockApp"])
+
+  fileprivate init(sourceLocation: Mockingbird.SourceLocation) {
+    self.mockingbirdContext.sourceLocation = sourceLocation
+    NetworkableMock.staticMock.mockingbirdContext.sourceLocation = sourceLocation
+  }
+
+  // MARK: Mocked `getMethod`(`completionHandler`: @escaping (MockApp.BitcoinResponse?) -> ())
+  public func `getMethod`(`completionHandler`: @escaping (MockApp.BitcoinResponse?) -> ()) -> Void {
+    return self.mockingbirdContext.mocking.didInvoke(Mockingbird.SwiftInvocation(selectorName: "`getMethod`(`completionHandler`: @escaping (MockApp.BitcoinResponse?) -> ()) -> Void", selectorType: Mockingbird.SelectorType.method, arguments: [Mockingbird.ArgumentMatcher(`completionHandler`)], returnType: Swift.ObjectIdentifier((Void).self))) {
+      self.mockingbirdContext.recordInvocation($0)
+      let mkbImpl = self.mockingbirdContext.stubbing.implementation(for: $0)
+      if let mkbImpl = mkbImpl as? (@escaping (MockApp.BitcoinResponse?) -> ()) -> Void { return mkbImpl(`completionHandler`) }
+      if let mkbImpl = mkbImpl as? () -> Void { return mkbImpl() }
+      for mkbTargetBox in self.mockingbirdContext.proxy.targets(for: $0) {
+        switch mkbTargetBox.target {
+        case .super:
+          break
+        case .object(let mkbObject):
+          guard var mkbObject = mkbObject as? MockingbirdSupertype else { break }
+          let mkbValue: Void = mkbObject.`getMethod`(completionHandler: `completionHandler`)
+          self.mockingbirdContext.proxy.updateTarget(&mkbObject, in: mkbTargetBox)
+          return mkbValue
+        }
+      }
+      if let mkbValue = self.mockingbirdContext.stubbing.defaultValueProvider.value.provideValue(for: (Void).self) { return mkbValue }
+      self.mockingbirdContext.stubbing.failTest(for: $0, at: self.mockingbirdContext.sourceLocation)
+    }
+  }
+
+  public func `getMethod`(`completionHandler`: @autoclosure () -> (MockApp.BitcoinResponse?) -> ()) -> Mockingbird.Mockable<Mockingbird.FunctionDeclaration, (@escaping (MockApp.BitcoinResponse?) -> ()) -> Void, Void> {
+    return Mockingbird.Mockable<Mockingbird.FunctionDeclaration, (@escaping (MockApp.BitcoinResponse?) -> ()) -> Void, Void>(mock: self, invocation: Mockingbird.SwiftInvocation(selectorName: "`getMethod`(`completionHandler`: @escaping (MockApp.BitcoinResponse?) -> ()) -> Void", selectorType: Mockingbird.SelectorType.method, arguments: [Mockingbird.resolve(`completionHandler`)], returnType: Swift.ObjectIdentifier((Void).self)))
+  }
+}
+
+/// Returns a concrete mock of `Networkable`.
+public func mock(_ type: MockApp.Networkable.Protocol, file: StaticString = #file, line: UInt = #line) -> NetworkableMock {
+  return NetworkableMock(sourceLocation: Mockingbird.SourceLocation(file, line))
 }

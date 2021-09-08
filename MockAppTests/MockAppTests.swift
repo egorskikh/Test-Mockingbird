@@ -57,14 +57,4 @@ class MockAppTests: XCTestCase {
         verify(mockBirdble.fly()).wasNeverCalled()
     }
     
-    func test_canFly_was_called_before_fly() {
-    
-        // Non-greedy strategy can start from the second `canFly`
-//        inOrder(with: .noInvocationsAfter) {
-//          verify(mockBirdble.canFly).wasCalled()
-//          verify(mockBirdble.fly()).wasCalled()
-//        }
-        
-    }
-    
 }
